@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
@@ -21,7 +22,7 @@ import { AppRoutingModule } from './app-routing.module';
     AppComponent,
     SignupComponent,
     LoginComponent,
-    TrainingComponent,
+    TrainingComponent,  
     CurrentTrainingComponent,
     NewTrainingComponent,
     PastTrainingsComponent,
@@ -30,6 +31,7 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     FormsModule,
     MaterialModule,
     AppRoutingModule,
