@@ -3,8 +3,19 @@
         <p>SidenavBro</p>
     </mat-sidenav>
     <mat-sidenav-content>
-        <button (click)="sidenav.toggle()" >Open Sidenav</button>
-        <router-outlet></router-outlet>
+        <mat-toolbar color="primary" >
+            <div><button (click)="toggleNav()" >Toggle</button></div>
+            <div>LOGO</div>
+            <div>
+                <a routerLink="/signup">Signup</a>
+                <a routerLink="/login">Signin</a>
+                <a routerLink="/training">Train</a>
+            </div>
+        </mat-toolbar>
+        <main>
+            <router-outlet></router-outlet>
+        </main>
+        
     </mat-sidenav-content>
 </mat-sidenav-container>
 
