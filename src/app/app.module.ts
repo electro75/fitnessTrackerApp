@@ -17,6 +17,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
+import { StopTrainingComponent } from './training/current-training/stop-training.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
     PastTrainingsComponent,
     WelcomeComponent,
     HeaderComponent,
-    SidenavListComponent
+    SidenavListComponent,
+    StopTrainingComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +43,7 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
     AppRoutingModule,
     FlexLayoutModule
   ],
+  entryComponents: [StopTrainingComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
