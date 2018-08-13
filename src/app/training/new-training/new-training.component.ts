@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { TrainingService } from '../training.service';
+import { Exercise } from '../training.model';
 
 @Component({
   selector: 'app-new-training',
@@ -8,9 +10,14 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class NewTrainingComponent implements OnInit {
 
   @Output()startTraining = new EventEmitter<Boolean>();
-  constructor() { }
+  trainings: Exercise[] = [];
+
+  constructor(private trainingService: TrainingService) {
+
+   }
 
   ngOnInit() {
+    this.trainings = this.trainingService.getAvailableTrainings();
   }
 
   onStartTraining() {

@@ -6,14 +6,8 @@
     <mat-card-content fxLayoutAlign="center">
       <mat-form-field>
         <mat-select placeholder="Training Type">
-          <mat-option value="Pushups">
-            Pushups
-          </mat-option>
-          <mat-option value="Burpees">
-            Burpees
-          </mat-option>
-          <mat-option value="Plank">
-            Plank
+          <mat-option *ngFor="let training of trainings" [value]="training.id" >
+            {{ training.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
