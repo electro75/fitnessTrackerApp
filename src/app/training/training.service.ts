@@ -6,10 +6,10 @@ import { Exercise } from "./training.model";
 export class TrainingService {
     exerciseChanged = new Subject<Exercise>();
     private availableExercise : Exercise[] = [
-        { id: 'crunches', name: 'Crunches', duration: 30, caloriesBurned: 8 },
-        { id: 'pushups', name: 'Pushups', duration: 20, caloriesBurned: 20},
-        { id: 'lunges', name: 'Lunges', duration: 25, caloriesBurned: 18  },
-        { id: 'plank', name: 'Plank', duration: 60, caloriesBurned: 30 }
+        { id: 'crunches', name: 'Crunches', duration: 300, caloriesBurned: 8 },
+        { id: 'pushups', name: 'Pushups', duration: 200, caloriesBurned: 20},
+        { id: 'lunges', name: 'Lunges', duration: 250, caloriesBurned: 18  },
+        { id: 'plank', name: 'Plank', duration: 600, caloriesBurned: 30 }
     ];
 
     private currentExerc: Exercise;
@@ -22,5 +22,9 @@ export class TrainingService {
         this.currentExerc = this.availableExercise.find(ex => ex.id === selectedId);
         this.exerciseChanged.next({...this.currentExerc});
         
+    }
+
+    getRunningExercise() {
+        return {...this.currentExerc};
     }
 }
