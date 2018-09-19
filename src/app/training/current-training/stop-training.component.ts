@@ -8,8 +8,8 @@ import { MAT_DIALOG_DATA } from '@angular/material'
                     <p>Come on! Only {{100 - passedData.progress}}% to go!</p>
                 </mat-dialog-content>
                 <mat-dialog-actions>
-                    <button mat-button [mat-dialog-close]="true">Yes, Exit</button>
-                    <button mat-button [mat-dialog-close]="false">No, Lets finish this</button>
+                    <button mat-raised-button color='accent' [mat-dialog-close]="true">Yes, Exit</button>
+                    <button mat-raised-button color='primary' [mat-dialog-close]="false">No, Lets finish this</button>
                 </mat-dialog-actions>`
 })
 export class StopTrainingComponent {
