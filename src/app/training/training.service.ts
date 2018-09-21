@@ -9,8 +9,8 @@ import { AngularFirestore } from 'angularfire2/firestore';
 export class TrainingService {
     exerciseChanged = new Subject<Exercise>();
     exercisesChanged = new Subject<Exercise[]>();
+    finishedExercisesChanged = new Subject<Exercise[]>();
     private availableExercise : Exercise[] = [];
-
     private currentExerc;
     private exercises: Exercise[] = [];
 
@@ -60,8 +60,14 @@ export class TrainingService {
         this.exerciseChanged.next(null);
     }
 
-    getCompletedExercise() {
-        return this.exercises.slice();
+    fetchCompletedExercise() {
+        this.__store
+            .collection('finishedExercises')
+            .valueChanges()
+            .subscribe((exercises: Exercise[])=>{
+                console.log(exercises);
+                this.finishedExercisesChanged.next(exercises)
+            })
     }
 
     getRunningExercise() {
