@@ -23,7 +23,6 @@ export class CurrentTrainingComponent implements OnInit {
   }
 
   resumeTimer() {
-
     const step = this.trainingService.getRunningExercise().duration;
 
     this.timer = setInterval(()=>{

@@ -30,20 +30,20 @@ export class TrainingService {
                         })
                     })
             .subscribe((exercises: Exercise[]) => {
-                this.exercises = exercises;
-                this.exercisesChanged.next([...this.exercises]);
+                this.availableExercise = exercises;
+                this.exercisesChanged.next([...this.availableExercise]);
             })
 
     }
 
     startExerc(selectedId: String) {
-        this.currentExerc = this.availableExercise.find(ex => ex.id === selectedId);
+        this.currentExerc = this.availableExercise.find(ex => ex.name === selectedId);
         this.exerciseChanged.next({...this.currentExerc});
         
     }
 
     completeExerc() {
-        this.exercises.push({...this.currentExerc, 
+        this.sendDataToStore({...this.currentExerc, 
                             date: new Date(),
                             state: 'completed'});
         this.currentExerc = null;
@@ -51,7 +51,7 @@ export class TrainingService {
     }
 
     cancelExerc(progress) {
-        this.exercises.push({...this.currentExerc,
+        this.sendDataToStore({...this.currentExerc,
                             date: new Date(),
                             duration: this.currentExerc.duration * (progress / 100),
                             caloriesBurned: this.currentExerc.caloriesBurned * (progress / 100),
@@ -66,5 +66,11 @@ export class TrainingService {
 
     getRunningExercise() {
         return {...this.currentExerc};
+    }
+
+    sendDataToStore(exercise: Exercise) {
+        this.__store
+            .collection('finishedExercises')
+            .add(exercise)
     }
 }
