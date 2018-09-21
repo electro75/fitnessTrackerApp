@@ -17,21 +17,22 @@ export class TrainingService {
     constructor(private __store: AngularFirestore) {  }
 
     fetchAvailableTrainings() {
-         this.__store
-                .collection('availableExercises')
-                .snapshotChanges()
-                .map(docArray =>{
-                    return  docArray.map(doc => {
-                        return { id: doc.payload.doc.id,  
-                                name: doc.payload.doc.data().name,
-                                caloriesBurned: doc.payload.doc.data().caloriesBurned,
-                                duration: doc.payload.doc.data().duration }
-                            })
+        //new subscriptions replace the old ones, hence not polluting the memory of the app.
+        this.__store
+            .collection('availableExercises')
+            .snapshotChanges()
+            .map(docArray =>{
+                return  docArray.map(doc => {
+                    return { id: doc.payload.doc.id,  
+                            name: doc.payload.doc.data().name,
+                            caloriesBurned: doc.payload.doc.data().caloriesBurned,
+                            duration: doc.payload.doc.data().duration }
                         })
-                .subscribe((exercises: Exercise[]) => {
-                    this.exercises = exercises;
-                    this.exercisesChanged.next([...this.exercises]);
-                })
+                    })
+            .subscribe((exercises: Exercise[]) => {
+                this.exercises = exercises;
+                this.exercisesChanged.next([...this.exercises]);
+            })
 
     }
 

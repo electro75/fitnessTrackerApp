@@ -1,6 +1,6 @@
 <section>
     <form fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="center center"
-          [formGroup]="loginForm" (submit)="submitForm()" >
+          [formGroup]="loginForm" (submit)="submitForm()" style="margin-top: 3em">
       <mat-form-field>
   
         <input type="email" matInput placeholder="Your email" 
@@ -10,15 +10,16 @@
   
       </mat-form-field>
   
-      <mat-form-field hintLabel="Should atleast be 6 characters long">
+      <mat-form-field>
   
         <input type="password" matInput placeholder="Your password" 
                 formControlName="password">
-        <mat-error>Password should atleast be 6 characters long!</mat-error>
+        <!-- <mat-error>Password should atleast be 6 characters long!</mat-error> -->
         <!-- <mat-hint align="end" >{{ password.value?.length }}/6</mat-hint> -->
   
       </mat-form-field>
-      <button type="submit" mat-raised-button color="primary"
+      <button type="submit" mat-raised-button 
+              color="primary"
               [disabled]="loginForm.invalid">
               Login
       </button>
