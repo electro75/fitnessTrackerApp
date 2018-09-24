@@ -17,6 +17,21 @@ export class AuthService {
     authChange = new Subject<boolean>();
     private isAuthentiacted = false
 
+    initAuthListener() {
+        this.__auth.authState.subscribe(user => {
+            if(user) {
+                this.isAuthentiacted = true
+                this.authChange.next(true); 
+                this.router.navigate(['/training']);
+            } else {
+                this.trainingService.cancelSubscriptions();
+                this.isAuthentiacted = false
+                this.authChange.next(false);
+                this.router.navigate(['/login']);
+            }
+        });
+    }
+
     registerUser(authData: AuthData,) {
         // this.user = {
         //     email: authData.email,
@@ -26,7 +41,6 @@ export class AuthService {
             .createUserWithEmailAndPassword(authData.email, authData.password)
             .then(result => {
                 console.log(result);
-                this.authSuccessfully();
             })
             .catch(error => {
                 console.log(error)
@@ -39,7 +53,6 @@ export class AuthService {
             .signInWithEmailAndPassword(authData.email, authData.password)
             .then(result => {
                 console.log(result);
-                this.authSuccessfully();
             })
             .catch(error => {
                 console.log(error)
@@ -47,11 +60,9 @@ export class AuthService {
     }
 
     logout() {
-        this.trainingService.cancelSubscriptions();
+       
         this.__auth.auth.signOut();
-        this.isAuthentiacted = false
-        this.authChange.next(false);
-        this.router.navigate(['/login']);
+        
         
     }
 
@@ -61,9 +72,4 @@ export class AuthService {
         return this.isAuthentiacted
     }
 
-    private authSuccessfully() {
-        this.isAuthentiacted = true
-        this.authChange.next(true);
-        this.router.navigate(['/training']);
-    }
 }
