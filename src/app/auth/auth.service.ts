@@ -9,13 +9,15 @@ import { AuthData } from "./auth-data.model";
 
 import { AngularFireAuth } from 'angularfire2/auth'
 import { TrainingService } from '../training/training.service';
+import { UIService } from '../shared/ui.service';
 
 
 @Injectable()
 export class AuthService {
 
     constructor(private router: Router, private __auth: AngularFireAuth,
-                private trainingService: TrainingService, private snackbar: MatSnackBar) {  }
+                private trainingService: TrainingService, private snackbar: MatSnackBar,
+                private uiService: UIService) {  }
 
     authChange = new Subject<boolean>();
     private isAuthentiacted = false
@@ -36,12 +38,15 @@ export class AuthService {
     }
 
     registerUser(authData: AuthData,) {
+        this.uiService.loadingStateChanged.next(true)
         this.__auth.auth
             .createUserWithEmailAndPassword(authData.email, authData.password)
             .then(result => {
+                this.uiService.loadingStateChanged.next(false)
                 console.log(result);
             })
             .catch(error => {
+                this.uiService.loadingStateChanged.next(false)
                 this.snackbar.open(error.message, null, {
                     duration: 3000
                 });
@@ -49,13 +54,16 @@ export class AuthService {
     }
 
     login(authData: AuthData) {
+        this.uiService.loadingStateChanged.next(true)
         // angular fire also stores and sends the required token. making unauthorised access impossible
         this.__auth.auth
             .signInWithEmailAndPassword(authData.email, authData.password)
             .then(result => {
                 console.log(result);
+                this.uiService.loadingStateChanged.next(false)
             })
             .catch(error => {
+                this.uiService.loadingStateChanged.next(false)
                 this.snackbar.open(error.message, null, {
                     duration: 3000
                 });
