@@ -47,9 +47,7 @@ export class AuthService {
             })
             .catch(error => {
                 this.uiService.loadingStateChanged.next(false)
-                this.snackbar.open(error.message, null, {
-                    duration: 3000
-                });
+                this.uiService.showSnackbar(error.message, null, 3000);
             })
     }
 
@@ -64,9 +62,7 @@ export class AuthService {
             })
             .catch(error => {
                 this.uiService.loadingStateChanged.next(false)
-                this.snackbar.open(error.message, null, {
-                    duration: 3000
-                });
+                this.uiService.showSnackbar(error.message, null, 3000);
             })
     }
 
