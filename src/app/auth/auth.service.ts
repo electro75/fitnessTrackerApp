@@ -6,14 +6,16 @@ import { User } from "./user.model";
 import { AuthData } from "./auth-data.model";
 
 import { AngularFireAuth } from 'angularfire2/auth'
+import { TrainingService } from '../training/training.service';
 
 @Injectable()
 export class AuthService {
 
-    constructor(private router: Router, private __auth: AngularFireAuth) {  }
+    constructor(private router: Router, private __auth: AngularFireAuth,
+                private trainingService: TrainingService) {  }
 
     authChange = new Subject<boolean>();
-    private user: User;
+    private isAuthentiacted = false
 
     registerUser(authData: AuthData,) {
         // this.user = {
@@ -32,10 +34,7 @@ export class AuthService {
     }
 
     login(authData: AuthData) {
-        // this.user = {
-        //     email: authData.email,
-        //     userId: Math.round(Math.random()*1000).toString()
-        // }
+        // angular fire also stores and sends the required token. making unauthorised access impossible
         this.__auth.auth
             .signInWithEmailAndPassword(authData.email, authData.password)
             .then(result => {
@@ -48,20 +47,22 @@ export class AuthService {
     }
 
     logout() {
-        this.user = null;
+        this.trainingService.cancelSubscriptions();
+        this.__auth.auth.signOut();
+        this.isAuthentiacted = false
         this.authChange.next(false);
         this.router.navigate(['/login']);
+        
     }
 
-    getUser() {
-        return { ...this.user };
-    }
+    
 
     isAuth() {
-        return this.user != null;
+        return this.isAuthentiacted
     }
 
     private authSuccessfully() {
+        this.isAuthentiacted = true
         this.authChange.next(true);
         this.router.navigate(['/training']);
     }

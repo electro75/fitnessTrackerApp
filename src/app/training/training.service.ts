@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs';
 
 import { Exercise } from "./training.model";
 import { Injectable } from '@angular/core';
@@ -9,30 +10,37 @@ import { AngularFirestore } from 'angularfire2/firestore';
 export class TrainingService {
     exerciseChanged = new Subject<Exercise>();
     exercisesChanged = new Subject<Exercise[]>();
+    private __subsArray: Subscription[] = [];
+
     finishedExercisesChanged = new Subject<Exercise[]>();
     private availableExercise : Exercise[] = [];
-    private currentExerc;
     private exercises: Exercise[] = [];
+
+    private currentExerc;
 
     constructor(private __store: AngularFirestore) {  }
 
     fetchAvailableTrainings() {
         //new subscriptions replace the old ones, hence not polluting the memory of the app.
-        this.__store
-            .collection('availableExercises')
-            .snapshotChanges()
-            .map(docArray =>{
-                return  docArray.map(doc => {
-                    return { id: doc.payload.doc.id,  
-                            name: doc.payload.doc.data().name,
-                            caloriesBurned: doc.payload.doc.data().caloriesBurned,
-                            duration: doc.payload.doc.data().duration }
+        this.__subsArray.push(
+            this.__store
+                .collection('availableExercises')
+                .snapshotChanges()
+                .map(docArray =>{
+                    return  docArray.map(doc => {
+                        return { id: doc.payload.doc.id,  
+                                name: doc.payload.doc.data().name,
+                                caloriesBurned: doc.payload.doc.data().caloriesBurned,
+                                duration: doc.payload.doc.data().duration }
+                            })
                         })
-                    })
-            .subscribe((exercises: Exercise[]) => {
-                this.availableExercise = exercises;
-                this.exercisesChanged.next([...this.availableExercise]);
-            })
+                .subscribe((exercises: Exercise[]) => {
+                    this.availableExercise = exercises;
+                    this.exercisesChanged.next([...this.availableExercise]);
+                }
+            )
+        )
+            
 
     }
 
@@ -61,12 +69,16 @@ export class TrainingService {
     }
 
     fetchCompletedExercise() {
-        this.__store
-            .collection('finishedExercises')
-            .valueChanges()
-            .subscribe((exercises: Exercise[])=>{
-                this.finishedExercisesChanged.next(exercises)
-            })
+        this.__subsArray.push(
+            this.__store
+                .collection('finishedExercises')
+                .valueChanges()
+                .subscribe((exercises: Exercise[])=>{
+                    this.finishedExercisesChanged.next(exercises)
+                }
+            )
+        )
+        
     }
 
     getRunningExercise() {
@@ -77,5 +89,9 @@ export class TrainingService {
         this.__store
             .collection('finishedExercises')
             .add(exercise)
+    }
+
+    cancelSubscriptions() {
+        this.__subsArray.forEach(sub => sub.unsubscribe());
     }
 }
