@@ -23,13 +23,13 @@ export class TrainingService {
     constructor(private __store: AngularFirestore, private uiService: UIService) {  }
 
     fetchAvailableTrainings() {
+        this.uiService.loadingStateChanged.next(true);
         //new subscriptions replace the old ones, hence not polluting the memory of the app.
         this.__subsArray.push(
             this.__store
                 .collection('availableExercises')
                 .snapshotChanges()
                 .pipe(map(docArray =>{
-                    // throw(new Error);
                     return  docArray.map((doc: any) => {
                         return { id: doc.payload.doc.id,  
                                 name: doc.payload.doc.data().name,
@@ -38,9 +38,11 @@ export class TrainingService {
                             })
                         }))
                 .subscribe((exercises: Exercise[]) => {
+                    this.uiService.loadingStateChanged.next(false);
                     this.availableExercise = exercises;
                     this.exercisesChanged.next([...this.availableExercise]);
                 }, error => {
+                    this.uiService.loadingStateChanged.next(false);
                     this.uiService.showSnackbar('Sorry! Could not load data',null, 3000);
                 }
             )

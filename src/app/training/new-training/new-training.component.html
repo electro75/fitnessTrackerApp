@@ -1,27 +1,31 @@
 <section class="training" fxLayout fxLayoutAlign="center">
   <form (ngSubmit)="onStartTraining(f)" #f="ngForm">
     <mat-card  fxFlex.xs="100%" fxFlex="400px">
-      <ng-template [ngIf]="isDataInit">
         <mat-card-title fxLayoutAlign="center" >
           Let's train
         </mat-card-title>
         <mat-card-content fxLayoutAlign="center">
-          <mat-form-field>
+          <mat-form-field *ngIf="!isLoading && trainings">
             <mat-select placeholder="Training Type" ngModel name="exercise" required>
               <mat-option *ngFor="let training of trainings" [value]="training.name" >
                 {{ training.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-spinner color="accent" *ngIf="isLoading && !trainings" ></mat-spinner>
         </mat-card-content>
-        <mat-card-actions fxLayoutAlign="center">
-          <button mat-raised-button color="accent"
-                [disabled]="f.invalid">Start!</button>
+        <mat-card-actions fxLayoutAlign="center" *ngIf="!isLoading">
+          <button mat-raised-button [disabled]="f.invalid"
+                 *ngIf="trainings" color='accent' >
+                Start!
+          </button>
+          <button mat-raised-button *ngIf="!trainings"
+                  (click)="fetch()" >
+                <i class="material-icons">
+                  cached
+                  </i> Retry
+          </button>
         </mat-card-actions>
-      </ng-template>
-      <ng-template [ngIf]="!isDataInit" >
-        <mat-spinner color='accent'></mat-spinner>
-      </ng-template>
     </mat-card>
   </form>
   
