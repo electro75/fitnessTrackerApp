@@ -1,0 +1,15 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$fitApp-primary: mat-palette($mat-grey, 900);
+$fitApp-accent:  mat-palette($mat-green, A700, A400, A200);
+
+// The warn palette is optional (defaults to red).
+$fitApp-warn:    mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$fitApp-theme: mat-light-theme($fitApp-primary, $fitApp-accent, $fitApp-warn);
+
+
+@include angular-material-theme($fitApp-theme);

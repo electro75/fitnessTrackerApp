@@ -6,6 +6,7 @@ import { Exercise } from "./training.model";
 import { Injectable } from '@angular/core';
 
 import { AngularFirestore } from '@angular/fire/firestore';
+import { UIService } from '../shared/ui.service';
 
 @Injectable()
 export class TrainingService {
@@ -19,7 +20,7 @@ export class TrainingService {
 
     private currentExerc;
 
-    constructor(private __store: AngularFirestore) {  }
+    constructor(private __store: AngularFirestore, private uiService: UIService) {  }
 
     fetchAvailableTrainings() {
         //new subscriptions replace the old ones, hence not polluting the memory of the app.
@@ -28,6 +29,7 @@ export class TrainingService {
                 .collection('availableExercises')
                 .snapshotChanges()
                 .pipe(map(docArray =>{
+                    // throw(new Error);
                     return  docArray.map((doc: any) => {
                         return { id: doc.payload.doc.id,  
                                 name: doc.payload.doc.data().name,
@@ -38,6 +40,8 @@ export class TrainingService {
                 .subscribe((exercises: Exercise[]) => {
                     this.availableExercise = exercises;
                     this.exercisesChanged.next([...this.availableExercise]);
+                }, error => {
+                    this.uiService.showSnackbar('Sorry! Could not load data',null, 3000);
                 }
             )
         )
