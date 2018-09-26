@@ -8,7 +8,6 @@ import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { WelcomeComponent } from './welcome/welcome.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -35,7 +34,7 @@ import { TrainingModule } from './training/training.module';
     BrowserModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase, 'fitnessTracker'),
-    AngularFireAuthModule,
+    
     MaterialModule,
     AppRoutingModule,
     FlexLayoutModule
