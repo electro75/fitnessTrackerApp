@@ -5,7 +5,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from './material.module';
 import { AngularFireModule } from '@angular/fire';
 import { AuthModule } from './auth/auth.module';
-import { TrainingModule } from './training/training.module';
 
 import { environment } from '../environments/environment';
 
@@ -17,6 +16,7 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
 import { AuthService } from './auth/auth.service';
 import { TrainingService } from './training/training.service';
 import { UIService } from './shared/ui.service';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 
 
@@ -30,11 +30,10 @@ import { UIService } from './shared/ui.service';
   ],
   imports: [
     AuthModule,
-    TrainingModule,
     BrowserModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase, 'fitnessTracker'),
-    
+    AngularFirestoreModule,
     MaterialModule,
     AppRoutingModule,
     FlexLayoutModule
