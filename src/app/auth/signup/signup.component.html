@@ -31,9 +31,9 @@
                   required>Agree to Terms and conditions.
     </mat-checkbox>
     <button type="submit" mat-raised-button color="primary"
-            [disabled]="f.invalid" *ngIf="!isLoading">
+            [disabled]="f.invalid" *ngIf="!(isLoading$ | async)">
             Signup
     </button>
-    <mat-spinner *ngIf="isLoading" color='accent' ></mat-spinner>
+    <mat-spinner *ngIf="isLoading$ | async" color='accent' ></mat-spinner>
   </form>
 </section>

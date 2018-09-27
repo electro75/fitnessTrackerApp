@@ -2,26 +2,32 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { UIService } from '../../shared/ui.service';
-import { Subscription } from 'rxjs';
+
+import { Subscription, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import 'rxjs/add/operator/map'
+import * as fromRoot from '../../app.reducer';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
 
   public loginForm : FormGroup;
-  public isLoading = false;
+  public isLoading$ : Observable<any>;
   public loaderSub = new Subscription;
 
   constructor(private _fb: FormBuilder, private authService: AuthService,
-              private uiService: UIService) { }
+              private uiService: UIService, private __store: Store<fromRoot.State>) { }
 
   ngOnInit() {
-    this.loaderSub = this.uiService.loadingStateChanged.subscribe(res => {
-      this.isLoading = res
-    })
+    this.isLoading$ = this.__store.select(fromRoot.getIsLoading)
+
+    // this.loaderSub = this.uiService.loadingStateChanged.subscribe(res => {
+    //   this.isLoading = res
+    // })
     this.loginForm = this._fb.group({
       email: [''],
       password: ['']
@@ -36,11 +42,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnDestroy() {
-    if(this.loaderSub) {
-      this.loaderSub.unsubscribe();
-    }
+  // ngOnDestroy() {
+  //   if(this.loaderSub) {
+  //     this.loaderSub.unsubscribe();
+  //   }
     
-  }
+  // }
 
 }

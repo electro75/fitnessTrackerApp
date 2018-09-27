@@ -4,9 +4,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from './material.module';
 import { AngularFireModule } from '@angular/fire';
+import { StoreModule } from '@ngrx/store';
 import { AuthModule } from './auth/auth.module';
 
 import { environment } from '../environments/environment';
+
+import { reducers } from './app.reducer';
 
 import { AppComponent } from './app.component';
 import { WelcomeComponent } from './welcome/welcome.component';
@@ -36,6 +39,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     AngularFirestoreModule,
     MaterialModule,
     AppRoutingModule,
+    StoreModule.forRoot(reducers),
     FlexLayoutModule
   ],
   providers: [AuthService, TrainingService, UIService],
