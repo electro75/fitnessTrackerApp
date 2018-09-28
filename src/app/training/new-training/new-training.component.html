@@ -5,16 +5,16 @@
           Let's train
         </mat-card-title>
         <mat-card-content fxLayoutAlign="center">
-          <mat-form-field *ngIf="!isLoading && trainings">
+          <mat-form-field *ngIf="!(isLoading$ | async) && trainings">
             <mat-select placeholder="Training Type" ngModel name="exercise" required>
               <mat-option *ngFor="let training of trainings" [value]="training.name" >
                 {{ training.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-spinner color="accent" *ngIf="isLoading && !trainings" ></mat-spinner>
+          <mat-spinner color="accent" *ngIf="(isLoading$ | async) && !trainings" ></mat-spinner>
         </mat-card-content>
-        <mat-card-actions fxLayoutAlign="center" *ngIf="!isLoading">
+        <mat-card-actions fxLayoutAlign="center" *ngIf="!(isLoading$ | async)">
           <button mat-raised-button [disabled]="f.invalid"
                  *ngIf="trainings" color='accent' >
                 Start!

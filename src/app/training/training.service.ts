@@ -8,6 +8,10 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { UIService } from '../shared/ui.service';
 
+import * as UI from '../shared/ui.actions';
+import * as fromRoot from '../app.reducer';
+import { Store }from '@ngrx/store';
+
 @Injectable()
 export class TrainingService {
     exerciseChanged = new Subject<Exercise>();
@@ -20,10 +24,12 @@ export class TrainingService {
 
     private currentExerc;
 
-    constructor(private __store: AngularFirestore, private uiService: UIService) {  }
+    constructor(private __store: AngularFirestore, private uiService: UIService,
+                private store: Store<fromRoot.State>) {  }
 
     fetchAvailableTrainings() {
-        this.uiService.loadingStateChanged.next(true);
+        this.store.dispatch(new UI.StartLoading());
+        // this.uiService.loadingStateChanged.next(true);
         //new subscriptions replace the old ones, hence not polluting the memory of the app.
         this.__subsArray.push(
             this.__store
@@ -38,11 +44,13 @@ export class TrainingService {
                             })
                         }))
                 .subscribe((exercises: Exercise[]) => {
-                    this.uiService.loadingStateChanged.next(false);
+                    this.store.dispatch(new UI.StopLoading());
+                    // this.uiService.loadingStateChanged.next(false);
                     this.availableExercise = exercises;
                     this.exercisesChanged.next([...this.availableExercise]);
                 }, error => {
-                    this.uiService.loadingStateChanged.next(false);
+                    // this.uiService.loadingStateChanged.next(false);
+                    this.store.dispatch(new UI.StopLoading());
                     this.uiService.showSnackbar('Sorry! Could not load data',null, 3000);
                 }
             )

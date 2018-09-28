@@ -72,10 +72,7 @@ export class AuthService {
     }
 
     logout() {
-       
         this.__auth.auth.signOut();
-        
-        
     }
 
     
