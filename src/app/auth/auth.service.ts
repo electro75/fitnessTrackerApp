@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs/Subject';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -14,6 +13,7 @@ import { UIService } from '../shared/ui.service';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../app.reducer';
 import * as UI from '../shared/ui.actions';
+import * as Auth from '../auth/auth.actions';
 
 @Injectable()
 export class AuthService {
@@ -22,19 +22,15 @@ export class AuthService {
                 private trainingService: TrainingService, private snackbar: MatSnackBar,
                 private uiService: UIService, private __store: Store<fromRoot.State>) {  }
 
-    authChange = new Subject<boolean>();
-    private isAuthentiacted = false
 
     initAuthListener() {
         this.__auth.authState.subscribe(user => {
             if(user) {
-                this.isAuthentiacted = true
-                this.authChange.next(true); 
+                this.__store.dispatch(new Auth.SetAuthenticated());
                 this.router.navigate(['/training']);
             } else {
                 this.trainingService.cancelSubscriptions();
-                this.isAuthentiacted = false
-                this.authChange.next(false);
+                this.__store.dispatch(new Auth.SetUnauthenticated());
                 this.router.navigate(['/login']);
             }
         });
@@ -75,10 +71,5 @@ export class AuthService {
         this.__auth.auth.signOut();
     }
 
-    
-
-    isAuth() {
-        return this.isAuthentiacted
-    }
 
 }
