@@ -1,0 +1,57 @@
+import { Action } from "@ngrx/store";
+import { TrainingActions, SET_AVAILABLE_TRAININGS, SET_FINISHED_TRAININGS, 
+            START_TRAINING, STOP_TRAINING } from './training.action';
+import { Exercise } from "./training.model";
+import * as fromRoot from '../app.reducer';
+
+export interface TrainingState {
+    availableExercises: Exercise[];
+    finishedExercises: Exercise[];
+    currentTraining: Exercise;
+}
+
+export interface State extends fromRoot.State {
+    training: TrainingState
+}
+
+const initialState: TrainingState = {
+    availableExercises: [],
+    finishedExercises: [],
+    currentTraining: null
+}
+
+export function trainingReducer(state = initialState, action: TrainingActions) {
+    switch(action.type) {
+
+        case SET_AVAILABLE_TRAININGS :
+            return {
+                ...state,
+                availableExercises: action.payload
+            }
+
+        case SET_FINISHED_TRAININGS :
+            return {
+                ...state,
+                finishedExercises: action.payload
+            }
+
+        case START_TRAINING :
+            return {
+                ...state,
+                currentTraining: action.payload
+            }
+
+        case STOP_TRAINING :
+            return {
+                ...state,
+                currentTraining: null
+            }
+        
+        default :
+            return state
+    }
+}
+
+export const getAvailableExercises  = (state: TrainingState) => { state.availableExercises }
+export const getFinishedExercises   = (state: TrainingState) => { state.finishedExercises }
+export const getCurrentTraining     = (state: TrainingState) => { state.currentTraining }
