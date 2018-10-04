@@ -22,10 +22,7 @@ export class TrainingService {
     private __subsArray: Subscription[] = [];
 
     finishedExercisesChanged = new Subject<Exercise[]>();
-    private availableExercise : Exercise[] = [];
-    private exercises: Exercise[] = [];
-
-    private currentExerc;
+  
 
     constructor(private __store: AngularFirestore, private uiService: UIService,
                 private store: Store<fromTraining.State>) {  }
