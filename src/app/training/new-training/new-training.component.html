@@ -5,21 +5,21 @@
           Let's train
         </mat-card-title>
         <mat-card-content fxLayoutAlign="center">
-          <mat-form-field *ngIf="!(isLoading$ | async) && trainings">
+          <mat-form-field *ngIf="!(isLoading$ | async) && (trainings$ | async)">
             <mat-select placeholder="Training Type" ngModel name="exercise" required>
-              <mat-option *ngFor="let training of trainings" [value]="training.name" >
+              <mat-option *ngFor="let training of (trainings$ | async)" [value]="training.name" >
                 {{ training.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-spinner color="accent" *ngIf="(isLoading$ | async) && !trainings" ></mat-spinner>
+          <mat-spinner color="accent" *ngIf="(isLoading$ | async) && !(trainings$ | async)" ></mat-spinner>
         </mat-card-content>
         <mat-card-actions fxLayoutAlign="center" *ngIf="!(isLoading$ | async)">
           <button mat-raised-button [disabled]="f.invalid"
-                 *ngIf="trainings" color='accent' >
+                 *ngIf="(trainings$ | async)" color='accent' >
                 Start!
           </button>
-          <button mat-raised-button *ngIf="!trainings"
+          <button mat-raised-button *ngIf="!(trainings$ | async)"
                   (click)="fetch()" >
                 <i class="material-icons">
                   cached

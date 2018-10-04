@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 import { Exercise } from "./training.model";
 import { Injectable } from '@angular/core';
@@ -67,19 +67,32 @@ export class TrainingService {
     }
 
     completeExerc() {
-        this.sendDataToStore({...this.currentExerc, 
-                            date: new Date(),
-                            state: 'completed'});
-        this.store.dispatch(new Training.StopTraining());
+        this.store.select(fromTraining.getCurrentTraining)
+            .pipe(take(1))
+            .subscribe(ex => {
+            this.sendDataToStore({
+                ...ex, 
+                date: new Date(),
+                state: 'completed'});
+            this.store.dispatch(new Training.StopTraining());
+        })
+
+        
     }
 
     cancelExerc(progress) {
-        this.sendDataToStore({...this.currentExerc,
-                            date: new Date(),
-                            duration: this.currentExerc.duration * (progress / 100),
-                            caloriesBurned: this.currentExerc.caloriesBurned * (progress / 100),
-                            state: 'cancelled'});
-        this.store.dispatch(new Training.StopTraining());
+        this.store.select(fromTraining.getCurrentTraining)
+            .pipe(take(1))
+            .subscribe((ex: any)=> {
+            this.sendDataToStore({
+                ...ex,
+                date: new Date(),
+                duration: ex.duration * (progress / 100),
+                caloriesBurned: ex.caloriesBurned * (progress / 100),
+                state: 'cancelled'});
+            this.store.dispatch(new Training.StopTraining());
+        })
+        
     }
 
     fetchCompletedExercise() {
@@ -93,10 +106,6 @@ export class TrainingService {
             )
         )
         
-    }
-
-    getRunningExercise() {
-        return {...this.currentExerc};
     }
 
     sendDataToStore(exercise: Exercise) {
