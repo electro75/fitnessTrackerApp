@@ -1,6 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+
 import {  Subscription} from 'rxjs';
+
+import { Store } from '@ngrx/store';
+import * as fromTraining from '../training.reducer';
+
 import { DataSource } from '@angular/cdk/table';
 import { Exercise } from '../training.model';
 import { TrainingService } from '../training.service';
@@ -10,7 +15,7 @@ import { TrainingService } from '../training.service';
   templateUrl: './past-trainings.component.html',
   styleUrls: ['./past-trainings.component.css']
 })
-export class PastTrainingsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PastTrainingsComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -20,14 +25,13 @@ export class PastTrainingsComponent implements OnInit, AfterViewInit, OnDestroy 
   displayedColumns = ['name', 'duration', 'calories', 'status'];
   dataSource = new MatTableDataSource<Exercise>()
 
-  constructor(private trainingService: TrainingService) { }
+  constructor(private trainingService: TrainingService, private __store: Store<fromTraining.State>) { }
 
   ngOnInit() {
-    this.exercChangedSub = this.trainingService.finishedExercisesChanged
-                                .subscribe((exercises: Exercise[])=>{
-                                    this.dataSource.data = exercises;
-                                  })
-    this.trainingService.fetchCompletedExercise();
+    this.__store.select(fromTraining.getFinishedExercises).subscribe( exs => {
+      this.dataSource.data = exs;
+    })
+
   }
 
   ngAfterViewInit() {
@@ -37,13 +41,6 @@ export class PastTrainingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
   doFilter(value) {
     this.dataSource.filter = value.trim().toLowerCase();
-  }
-
-  ngOnDestroy() {
-    if(this.exercChangedSub) {
-      this.exercChangedSub.unsubscribe();
-    }
-    
   }
 
 }
