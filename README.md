@@ -1,7 +1,7 @@
 # FitnessTracker
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.3.
-Prject can be viewed [here](https://fitnesstracker-2ef9a.firebaseapp.com)
+Project can be viewed [here](https://fitnesstracker-2ef9a.firebaseapp.com)
 
 ## Development server
 
